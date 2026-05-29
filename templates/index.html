@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EcoYvy — Economía Circular con IA</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap"
+        as="style" onload="this.onload=null;this.rel='stylesheet'"/>
+  <link rel="stylesheet" href="/static/css/custom.css"/>
+</head>
+<body class="d-flex flex-column align-items-center justify-content-center min-vh-100">
+
+  <!-- Background illustration -->
+  <div class="bg-illustration" aria-hidden="true">
+    <svg viewBox="0 0 1400 780" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <radialGradient id="g1" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#2d9a4e" stop-opacity="0.14"/>
+          <stop offset="100%" stop-color="#2d9a4e" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="g2" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#4285f4" stop-opacity="0.08"/>
+          <stop offset="100%" stop-color="#4285f4" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <ellipse cx="980" cy="320" rx="400" ry="360" fill="url(#g1)"/>
+      <ellipse cx="160" cy="640" rx="280" ry="210" fill="url(#g2)"/>
+      <circle cx="980" cy="320" r="310" fill="none" stroke="#2d9a4e" stroke-opacity="0.08" stroke-width="1.5"/>
+      <circle cx="980" cy="320" r="230" fill="none" stroke="#2d9a4e" stroke-opacity="0.06" stroke-width="1.5"/>
+      <circle cx="980" cy="320" r="150" fill="none" stroke="#2d9a4e" stroke-opacity="0.05" stroke-width="1"/>
+      <path d="M0 650 C200 610 450 645 700 618 C950 591 1150 625 1400 605 L1400 780 L0 780Z" fill="#2d9a4e" fill-opacity="0.07"/>
+      <path d="M0 715 C250 682 500 705 750 688 C1000 671 1200 694 1400 680 L1400 780 L0 780Z" fill="#2d9a4e" fill-opacity="0.09"/>
+      <path d="M90 145 Q132 82 188 112 Q148 174 90 145Z" fill="#2d9a4e" fill-opacity="0.12"/>
+      <path d="M1252 62 Q1292 12 1342 40 Q1307 92 1252 62Z" fill="#2d9a4e" fill-opacity="0.10"/>
+      <ellipse cx="112" cy="660" rx="36" ry="46" fill="#2d9a4e" fill-opacity="0.10"/>
+      <ellipse cx="112" cy="633" rx="24" ry="32" fill="#2d9a4e" fill-opacity="0.08"/>
+      <rect x="108" y="696" width="7" height="26" rx="3" fill="#2d9a4e" fill-opacity="0.10"/>
+      <ellipse cx="1312" cy="650" rx="28" ry="38" fill="#2d9a4e" fill-opacity="0.09"/>
+      <ellipse cx="1312" cy="624" rx="18" ry="26" fill="#2d9a4e" fill-opacity="0.07"/>
+      <rect x="1309" y="682" width="6" height="20" rx="2" fill="#2d9a4e" fill-opacity="0.09"/>
+    </svg>
+  </div>
+
+  <!-- Landing card -->
+  <div class="card landing-card shadow-lg border-0 p-4 p-sm-5" style="width:min(460px,92vw); border-radius:24px!important">
+
+    <!-- Logo -->
+    <div class="text-center mb-4">
+      <span class="fw-bold fs-5 text-eco">🌿 EcoYvy</span>
+    </div>
+
+    <!-- Title -->
+    <h1 class="fw-black text-center mb-2 lh-sm" style="font-size:clamp(1.5rem,4vw,1.9rem)">
+      Turn Recycling<br/>into <span class="text-eco">Impact</span>
+    </h1>
+    <p class="text-center text-muted mb-4" style="font-size:.88rem">
+      Earn EcoPoints, help Paraguay, and protect our rivers.
+    </p>
+
+    <!-- Role buttons -->
+    <div class="d-flex flex-column gap-3">
+
+      <!-- <a href="/citizen" class="role-btn">
+        <span class="role-icon">🧑‍🤝‍🧑</span>
+        <div class="role-text">
+          <span class="role-label">I am citizen</span>
+          <span class="role-sub">Report waste · Win EcoPoints</span>
+        </div>
+        <span class="text-muted ms-auto">›</span>
+      </a> -->
+
+      <a href="/citizen" class="role-btn featured">
+        <span class="role-icon">♻️</span>
+        <div class="role-text">
+          <span class="role-label">🚀 Start Recycling</span>
+          <span class="role-sub">Alerts · prices · AI-optimized routes</span>
+        </div>
+        <span class="ms-auto opacity-75">›</span>
+      </a>
+
+      <!-- <a href="/business" class="role-btn">
+        <span class="role-icon">🏢</span>
+        <div class="role-text">
+          <span class="role-label">Enterprise</span>
+          <span class="role-sub">Dashboard ESG · MRV Certification</span>
+        </div>
+        <span class="text-muted ms-auto">›</span>
+      </a> -->
+
+    </div>
+  </div>
+
+  <!-- <p class="position-relative mt-3 text-muted" style="font-size:.72rem;z-index:1">
+    © 2026 EcoYvy
+  </p>
+ -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EcoYvy — Business ESG Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap"
+        as="style" onload="this.onload=null;this.rel='stylesheet'"/>
+  <link rel="stylesheet" href="/static/css/custom.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-light navbar-eco navbar-expand-lg sticky-top">
+    <div class="container-lg">
+      <a class="navbar-brand fw-bold" href="/">🌿 EcoYvy</a>
+      <button class="navbar-toggler border-0" type="button"
+              data-bs-toggle="collapse" data-bs-target="#bizNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="bizNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+          <li class="nav-item"><a class="nav-link active" href="/business">ESG Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link soon" href="#">Reports</a></li>
+          <li class="nav-item"><a class="nav-link soon" href="#">Suppliers</a></li>
+          <li class="nav-item"><a class="nav-link soon" href="#">Certifications</a></li>
+          <li class="nav-item ms-lg-2">
+            <a class="btn btn-light btn-sm fw-semibold text-eco" href="/citizen">Citizen View</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- COMPANY HERO -->
+  <section class="company-hero">
+    <div class="container-lg">
+      <div class="d-flex flex-wrap align-items-center justify-content-between gap-4">
+        <div class="d-flex align-items-center gap-3 flex-wrap">
+          <div class="company-avatar">🏢</div>
+          <div>
+            <h1 class="fw-black mb-1 fs-3">
+              Business ESG Dashboard
+              <span class="verified-tag ms-1">✅ Verified</span>
+            </h1>
+            <!-- mockup: "Panadería El Trigo • Partner since 2026" -->
+            <p class="opacity-75 small mb-2">Panadería El Trigo · Partner since 2026</p>
+            <div class="d-flex gap-2 flex-wrap">
+              <span class="cbadge">🌿 Circular Economy</span>
+              <span class="cbadge">📊 MRV Certified</span>
+              <span class="cbadge">🤝 Local Network</span>
+            </div>
+          </div>
+        </div>
+        <div class="esg-ring-wrap d-none d-sm-block">
+          <svg class="esg-ring" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="10"/>
+            <circle cx="60" cy="60" r="50" fill="none"
+                    stroke="#fff" stroke-width="10" stroke-linecap="round"
+                    stroke-dasharray="{{ (esg.esg_score / 100 * 314)|round|int }} 314"
+                    stroke-dashoffset="78"/>
+          </svg>
+          <div class="esg-center">
+            <span class="esg-num">{{ esg.esg_score }}</span>
+            <span class="esg-lbl">ESG Score</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MRV-Verified Data Stream badge — ui_texts.md + mockup screen 5 -->
+  <div class="container-lg mt-4">
+    <div class="d-flex justify-content-center">
+      <div class="border rounded-pill px-4 py-2 d-inline-flex align-items-center gap-2 bg-white shadow-sm">
+        <span style="color:var(--eco)">🛡️</span>
+        <span class="fw-semibold small" style="color:var(--eco)">MRV-Verified Data Stream</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI CARDS -->
+  <section class="py-4">
+    <div class="container-lg">
+      <div class="row g-3">
+        <div class="col-sm-6 col-xl-3">
+          <div class="card border-0 shadow-sm rounded-4 p-3 h-100">
+            <div class="d-flex align-items-center gap-3">
+              <div class="kpi-icon-wrap" style="background:#d1fae5">♻️</div>
+              <div>
+                <span class="kpi-val">{{ esg.total_weight_kg }} kg</span>
+                <span class="kpi-lbl d-block">Waste diverted</span>
+                <span class="kpi-up">↑ 12% vs. last month</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+          <div class="card border-0 shadow-sm rounded-4 p-3 h-100">
+            <div class="d-flex align-items-center gap-3">
+              <div class="kpi-icon-wrap" style="background:#dcfce7">🌿</div>
+              <div>
+                <span class="kpi-val">{{ esg.total_co2_kg }} kg</span>
+                <span class="kpi-lbl d-block">CO₂ avoided</span>
+                <span class="kpi-up">↑ 8% vs. last month</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+          <div class="card border-0 shadow-sm rounded-4 p-3 h-100">
+            <div class="d-flex align-items-center gap-3">
+              <div class="kpi-icon-wrap" style="background:#ede9fe">⚡</div>
+              <div>
+                <span class="kpi-val">{{ esg.total_points }}</span>
+                <span class="kpi-lbl d-block">Corporate EcoPoints</span>
+                <span class="kpi-up">↑ 20% vs. last month</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+          <div class="card border-0 shadow-sm rounded-4 p-3 h-100">
+            <div class="d-flex align-items-center gap-3">
+              <div class="kpi-icon-wrap" style="background:#fef3c7">🤝</div>
+              <div>
+                <span class="kpi-val">6</span>
+                <span class="kpi-lbl d-block">Certified recyclers</span>
+                <span class="kpi-flat">→ No change</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ESG SECTIONS — mockup screen 5 -->
+  <section class="pb-4">
+    <div class="container-lg">
+      <div class="row g-4">
+
+        <!-- 🌎 ENVIRONMENTAL IMPACT -->
+        <div class="col-lg-4">
+          <div class="card border-0 shadow-sm rounded-4 h-100" style="border-top: 4px solid var(--eco) !important;">
+            <div class="card-body p-4">
+              <h6 class="fw-bold mb-3">🌎 ENVIRONMENTAL IMPACT</h6>
+              <ul class="list-unstyled small mb-0" style="line-height:2">
+                <li>• Waste reported: <strong>{{ esg.total_weight_kg }} kg</strong></li>
+                <li>• Recovered by recyclers:
+                  <strong>{{ esg.recovered_kg }} kg ({{ esg.recovered_pct }}%)</strong></li>
+                <li>• CO₂ Avoided:
+                  <strong>{{ esg.total_co2_kg }} kg (±{{ esg.co2_margin }} kg)</strong>
+                  <span class="badge bg-light text-dark border ms-1" style="font-size:.65rem">LCA-Calculated</span>
+                </li>
+                <li>• Trees equivalent: <strong>{{ esg.trees_saved }} 🌳</strong></li>
+                <li class="text-muted">• Contribution: Cleaned Río Paraguay, Zone 4</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 🤝 SOCIAL IMPACT -->
+        <div class="col-lg-4">
+          <div class="card border-0 shadow-sm rounded-4 h-100" style="border-top: 4px solid #3b82f6 !important;">
+            <div class="card-body p-4">
+              <h6 class="fw-bold mb-3" style="color:#3b82f6">🤝 SOCIAL IMPACT</h6>
+              <ul class="list-unstyled small mb-0" style="line-height:2">
+                <li>• Connected recyclers: <strong>2</strong></li>
+                <li>• Income generated:
+                  <strong>${{ esg.income_usd }} for local families</strong></li>
+                <li>• Eco Seal views: <strong>45 neighbors</strong></li>
+                <li>• Inspired nearby businesses: <strong>3</strong></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 📋 GOVERNANCE & COMPLIANCE -->
+        <div class="col-lg-4">
+          <div class="card border-0 shadow-sm rounded-4 h-100" style="border-top: 4px solid #7c3aed !important;">
+            <div class="card-body p-4">
+              <h6 class="fw-bold mb-3" style="color:#7c3aed">📋 GOVERNANCE & COMPLIANCE</h6>
+              <ul class="list-unstyled small mb-0" style="line-height:2">
+                <li>• Audit-ready report:
+                  <a href="#" class="text-decoration-none fw-semibold">📄 PDF</a>
+                  <span class="text-muted">(GRI 306 Standard)</span>
+                </li>
+                <li>• Traceability: GPS + AI Validated ✅</li>
+                <li>• Data Transparency: Recycler Cross-check ✅</li>
+                <li>• Circular Criteria: <strong>3/5 verified</strong> ✅</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CHARTS -->
+  <section class="pb-4">
+    <div class="container-lg">
+      <div class="row g-4">
+        <div class="col-lg-7">
+          <div class="card border-0 shadow-sm rounded-4 p-3 p-md-4 h-100">
+            <h6 class="fw-bold mb-3">📈 Monthly waste trend</h6>
+            <canvas id="trendChart"></canvas>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="card border-0 shadow-sm rounded-4 p-3 p-md-4 h-100">
+            <h6 class="fw-bold mb-3">📊 Breakdown by material</h6>
+            <canvas id="breakdownChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MATERIAL TABLE -->
+  <section class="pb-4">
+    <div class="container-lg">
+      <div class="card border-0 shadow-sm rounded-4 p-3 p-md-4">
+        <h6 class="fw-bold mb-3">🗂️ Recycled materials detail</h6>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0" style="font-size:.875rem">
+            <thead class="table-light">
+              <tr>
+                <th>Material</th><th>Weight (kg)</th>
+                <th>CO₂ avoided (kg)</th><th>EcoPoints</th><th>Certification</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in records %}
+              {% set mat = meta.get(r.material, {'label': r.material, 'icon': '♻️', 'color': '#2d9a4e'}) %}
+              <tr>
+                <td>
+                  <span class="mat-chip" style="--c:{{ mat.color }}">
+                    {{ mat.icon }} {{ mat.label }}
+                  </span>
+                </td>
+                <td class="fw-semibold">{{ r.weight_kg }}</td>
+                <td>{{ (r.weight_kg * 2.4)|round(2) }}</td>
+                <td>{{ (r.weight_kg * 100)|int }}</td>
+                <td>
+                  {% if r.verified %}
+                    <span class="status-badge-green">✅ MRV</span>
+                  {% else %}
+                    <span class="status-badge-grey">⏳ Pending</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🏆 ECO SEAL STATUS — mockup screen 5 -->
+  <section class="pb-5">
+    <div class="container-lg">
+      <div class="card border-0 shadow-sm rounded-4 p-4">
+        <h6 class="fw-bold mb-3">🏆 YOUR ECO SEAL STATUS</h6>
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+          <div>
+            <p class="mb-1">
+              Level:
+              {% for i in range(esg.seal_level) %}🌿{% endfor %}
+              <strong>({{ esg.seal_level }}/5)</strong>
+              &nbsp;·&nbsp;
+              Next:
+              {% for i in range(esg.seal_level + 1) %}🌿{% endfor %}
+              at <strong>{{ esg.next_milestone_kg }} kg</strong> recovered
+            </p>
+            <div class="progress mt-2" style="height:8px; max-width:320px">
+              <div class="progress-bar bg-success" role="progressbar"
+                   style="width:{{ (esg.seal_level / 5 * 100)|int }}%"></div>
+            </div>
+          </div>
+          <div class="d-flex flex-wrap gap-2">
+            <button class="btn btn-outline-secondary btn-sm rounded-3" disabled>
+              🔄 Update Data
+            </button>
+            <button class="btn btn-outline-secondary btn-sm rounded-3" disabled>
+              📄 Export ESG Report
+            </button>
+            <button class="btn btn-outline-secondary btn-sm rounded-3" disabled>
+              🏪 B2B Marketplace <span class="badge bg-secondary ms-1" style="font-size:.6rem">Phase 2</span>
+            </button>
+          </div>
+        </div>
+        <p class="text-muted mt-3 mb-0" style="font-size:.72rem">
+          *Metrics calculated using IPCC emission factors + local recycler validation.
+          Pilot data subject to refinement.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer-dark text-white py-3">
+    <div class="container-lg d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <a href="/" class="text-white text-decoration-none fw-bold">🌿 EcoYvy</a>
+      <small class="opacity-75">© 2026 EcoYvy. Building a circular future.</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const records   = {{ records | tojson }};
+    const months    = ["Jan","Feb","Mar","Apr","May"];
+    const wasteData = [120, 145, 130, 160, {{ esg.total_weight_kg }}];
+    const co2Data   = [80,  110,  95, 135, {{ esg.total_co2_kg }}];
+
+    new Chart(document.getElementById("trendChart"), {
+      type: "line",
+      data: {
+        labels: months,
+        datasets: [
+          { label: "Waste (kg)", data: wasteData,
+            borderColor: "#2d9a4e", backgroundColor: "rgba(45,154,78,.08)",
+            fill: true, tension: .4, pointBackgroundColor: "#2d9a4e" },
+          { label: "CO₂ avoided (kg)", data: co2Data,
+            borderColor: "#4285f4", backgroundColor: "rgba(66,133,244,.06)",
+            fill: true, tension: .4, pointBackgroundColor: "#4285f4" },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: "bottom" } },
+        scales: { y: { beginAtZero: true, grid: { color: "rgba(0,0,0,.05)" } } },
+      },
+    });
+
+    new Chart(document.getElementById("breakdownChart"), {
+      type: "doughnut",
+      data: {
+        labels: records.map(r => r.material),
+        datasets: [{ data: records.map(r => r.weight_kg),
+          backgroundColor: ["#3b82f6","#6b7280","#92400e","#10b981","#9ca3af","#7c3aed"],
+          borderWidth: 2, borderColor: "#fff" }],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: "bottom", labels: { boxWidth: 12, font: { size: 12 } } },
+          tooltip: { callbacks: { label: ctx => ` ${ctx.parsed} kg` } },
+        },
+      },
+    });
+  </script>
+</body>
+</html>
