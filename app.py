@@ -1,8 +1,16 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify  
+from models import db, WasteReport
 from calculations import analyze_upload, business_esg_summary, MATERIAL_META
 
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16 MB
+# Configuración de base de datos
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ecoyvy.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db.init_app(app)
+
+with app.app_context():
+    db.create_all()
 
 ALLOWED_EXT = {"png", "jpg", "jpeg", "webp", "gif"}
 
