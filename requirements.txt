@@ -1,2 +1,2 @@
 flask>=3.0.0
-flask-sqlalchemy *Testing access by Jesfer88*
+flask-sqlalchemy
