@@ -14,7 +14,6 @@
 ---
 
 ## 🌿 Overview
-
 **EcoYvy** is a web platform that gamifies recycling in Paraguay, allowing citizens and businesses to register waste, calculate their environmental impact (CO₂ avoided), and earn EcoPoints.
 
 ### Key Features:
