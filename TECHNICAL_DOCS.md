@@ -254,7 +254,6 @@ photo: <image file>
 - ESG performance indicators
 - MRV-verified reports
 - Historical trends and statistics
-```
 
 ## 🌍 Emission Factors & Sources
 | Material |	CO₂ Factor (kg/kg) |	Source |
