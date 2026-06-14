@@ -49,18 +49,22 @@ JavaScript (Fetch API) calculations.py (ESG Logic)
 ### Steps:
 
 1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/adrianrmz11/EcoYvyApp.git
-   cd EcoYvyApp
+```bash
+git clone https://github.com/adrianrmz11/EcoYvyApp.git
+cd EcoYvyApp
+```
 2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
+```bash
+pip install -r requirements.txt
+```
 3. Run the application:
-   ```bash
-   python app.py
+```bash
+python app.py
+```
 4. Access:
-  ```bash
+```bash
 Open your browser at: http://127.0.0.1:5000
+```
 
 Notes:
 The database (ecoyvy.db) is automatically created in the instance/ folder.
@@ -157,6 +161,11 @@ Values are automatically calculated when a report is created via `/api/analyze`.
 - Generic plastic: 0.050 kg
 - Electronics: 0.300 kg
 - Organic: 0.500 kg
+
+### Validation Rules
+
+- If a material is not found in the predefined catalog, a default weight factor of 0.050 kg per unit is used.
+- Negative quantities are automatically converted to 0 before calculations.
 
 ### 2. CO₂ Avoided Calculation
 **Formula:** `weight_kg × 2.4`
@@ -275,7 +284,7 @@ Phase 3 (Scaling)
 
 ---
 
-
+<!-- 
 **Fijate que:**
 1. Después del `end` final del diagrama, hay **tres comillas invertidas solas** en una línea
 2. Después de eso, una línea vacía
@@ -284,7 +293,7 @@ Phase 3 (Scaling)
 
 ---
 
-### 📝 CÓMO ARREGLARLO:
+### 📝 CÓMO ARREGLARLO: -->
 
 
 

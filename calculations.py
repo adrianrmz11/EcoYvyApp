@@ -76,7 +76,8 @@ def estimate_weight(material: str, quantity: int = 1) -> float:
 
     → Lógica del equipo: peso_por_unidad × cantidad
     """
-    unit_weight = WEIGHTS_PER_UNIT.get(material.lower(), 0.100)
+    quantity = max(quantity, 0)
+    unit_weight = WEIGHTS_PER_UNIT.get(material.lower(), 0.050)
     return round(unit_weight * quantity, 3)
 
 

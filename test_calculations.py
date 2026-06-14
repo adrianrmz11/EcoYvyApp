@@ -4,7 +4,7 @@ Verifica que los cálculos ESG/MRV funcionen correctamente
 """
 
 import pytest
-from calculations import estimate_weight, calculate_co2_saved, calculate_ecopoints, MATERIAL_META
+from calculations import estimate_weight, calculate_co2_avoided, calculate_ecopoints, MATERIAL_META
 
 
 class TestWeightEstimation:
@@ -41,17 +41,17 @@ class TestCO2Calculation:
     
     def test_co2_from_pet_weight(self):
         """0.15 kg de PET debe evitar 0.36 kg de CO₂"""
-        result = calculate_co2_saved(0.15)
+        result = calculate_co2_avoided(0.15)
         assert result == 0.36
     
     def test_co2_from_glass_weight(self):
         """0.70 kg de vidrio debe evitar 1.68 kg de CO₂"""
-        result = calculate_co2_saved(0.70)
+        result = calculate_co2_avoided(0.70)
         assert result == 1.68
     
     def test_co2_zero_weight(self):
         """0 kg debe generar 0 kg de CO₂ evitado"""
-        result = calculate_co2_saved(0)
+        result = calculate_co2_avoided(0)
         assert result == 0.0
 
 
