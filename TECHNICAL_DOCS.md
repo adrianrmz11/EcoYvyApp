@@ -267,7 +267,7 @@ EcoYvyApp/
 ### Phase 1 (MVP - Current)
 - ✅ Functional database
 - ✅ ESG/MRV calculations implemented
-- Complete frontend-backend connection
+- ✅ Complete frontend-backend connection
 - ⏳ Report persistence
 
 ### Phase 2 (Automation)
@@ -321,11 +321,11 @@ graph TB
     end
 ``` 
 
-👥 Team
+## 👥 Team
 - Backend & ESG Logic: Jesfer88 (Yisus)
 - Frontend & UI/UX: Guillermo Martínez (adrianrmz11)
 - Vision & Product: EcoYvy Team
 
-📄 License
+## 📄 License
 - Educational Project - EcoYvy Paraguay 2026
 - Last updated: June 2026
