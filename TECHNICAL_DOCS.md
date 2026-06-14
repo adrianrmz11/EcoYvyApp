@@ -217,6 +217,45 @@ Phase 3 (Scaling)
 - Real-time dashboard
 - Public documented API
 
+---
+
+
+**Fijate que:**
+1. Después del `end` final del diagrama, hay **tres comillas invertidas solas** en una línea
+2. Después de eso, una línea vacía
+3. Después, `---` (línea divisoria)
+4. Después, `## 👥 Team`
+
+---
+
+### 📝 CÓMO ARREGLARLO:
+
+
+
+## System Architecture Diagram
+
+```mermaid
+graph TB
+    subgraph Frontend
+        A[Usuario] -->|Navegador| B[index.html]
+        B --> C[citizen.html]
+        B --> D[business.html]
+        C --> E[JavaScript Fetch API]
+    end
+    
+    subgraph Backend
+        E -->|HTTP Request| F[Flask App]
+        F --> G[app.py]
+        G --> H[calculations.py]
+        G --> I[models.py]
+    end
+    
+    subgraph Database
+        I -->|SQLAlchemy| J[(SQLite DB)]
+        J --> K[waste_reports]
+    end
+``` 
+
 👥 Team
 - Backend & ESG Logic: Jesfer88 (Yisus)
 - Frontend & UI/UX: Guillermo Martínez (adrianrmz11)
