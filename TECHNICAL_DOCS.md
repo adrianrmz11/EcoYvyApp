@@ -65,6 +65,7 @@ python app.py
 Open your browser at: http://127.0.0.1:5000
 ```
 
+```markdown
 Notes:
 The database (ecoyvy.db) is automatically created in the instance/ folder.
 Debug mode is enabled for development.
