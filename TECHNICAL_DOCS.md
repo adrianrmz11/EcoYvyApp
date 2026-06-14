@@ -66,9 +66,65 @@ Notes:
 The database (ecoyvy.db) is automatically created in the instance/ folder.
 Debug mode is enabled for development.
 ```
+---
 
+## 🧪 Testing
+
+EcoYvy includes unit tests to verify that ESG/MRV calculations work correctly.
+
+### Prerequisites
+
+```bash
+pip install pytest
+```
+### Run All Tests
+
+```bash
+pytest test_calculations.py -v
+```
+
+**What this does:**
+- `-v` flag shows verbose output (each test name and result)
+- Runs all tests in `test_calculations.py`
+- Validates weight estimation, CO₂ calculations, and EcoPoints
+
+### Expected Output
+```bash
+============================= test session starts =============================
+platform win32 -- Python 3.x.x, pytest-x.x.x
+test_calculations.py::TestWeightEstimation::test_pet_bottle_weight PASSED
+test_calculations.py::TestWeightEstimation::test_glass_bottle_weight PASSED
+test_calculations.py::TestCO2Calculation::test_co2_from_pet_weight PASSED
+test_calculations.py::TestEcoPointsCalculation::test_ecopoints_without_mrv PASSED
+test_calculations.py::TestEcoPointsCalculation::test_ecopoints_with_mrv PASSED
+...
+============================== X passed in 0.xx s =============================
+```
+### Test Coverage
+
+The test suite validates:
+- ✅ Weight estimation for all materials (PET, glass, aluminum, cardboard, etc.)
+- ✅ CO₂ calculation formula (weight × 2.4)
+- ✅ EcoPoints calculation (with and without MRV bonus)
+- ✅ MATERIAL_META completeness
+- ✅ Edge cases (zero quantity, large quantities)
+
+### Add New Tests
+
+To add tests for new functionality:
+1. Create a new test function in `test_calculations.py`
+2. Follow the naming convention: `test_[feature]_[expected_behavior]`
+3. Use `assert` to validate expected results
+4. Run tests to verify they pass
+
+Example:
+```python
+def test_new_material_weight(self):
+    """10 units of new material should weigh 0.50 kg"""
+    result = estimate_weight("new_material", 10)
+    assert result == 0.50
+```
 ## 🗄️ Database Structure
-
 ### Table: `waste_reports`
 
 | Field | Type | Description |
