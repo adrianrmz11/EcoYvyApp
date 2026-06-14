@@ -227,7 +227,7 @@ Total EcoPoints
 Estimated income ($0.45/kg)
 ESG Seal Level (1-5)
 
-🌍 Emission Factors & Sources
+## 🌍 Emission Factors & Sources
 | Material |	CO₂ Factor (kg/kg) |	Source |
 |----------|---------------------|---------|
 | Plastic (PET) |	2.4	IPCC | Recycled vs. Virgin |
@@ -236,9 +236,9 @@ ESG Seal Level (1-5)
 |Cardboard |	2.4 |	Generalized |
 | Paper |	2.4 |	Generalized |
 
-Note: For the MVP, a generalized factor of 2.4 kg CO₂/kg is used. In Phase 2, specific factors per material will be implemented.
+- Note: For the MVP, a generalized factor of 2.4 kg CO₂/kg is used. In Phase 2, specific factors per material will be implemented.
 
-Project Structure
+## Project Structure
 ```
 EcoYvyApp/
 ├── app.py                    # Flask app + main routes
@@ -263,20 +263,20 @@ EcoYvyApp/
     └── logic/
         ── calculator.py    # Original calculation version
 ```
-🗺️ Roadmap
-- Phase 1 (MVP - Current)
+## 🗺️ Roadmap
+### Phase 1 (MVP - Current)
 - ✅ Functional database
 - ✅ ESG/MRV calculations implemented
 - Complete frontend-backend connection
 - ⏳ Report persistence
 
-Phase 2 (Automation)
+### Phase 2 (Automation)
 - Integration with ActivePieces/n8n
 - Webhooks for notifications
 - Automatic weekly reports
 - Google Sheets synchronization
 
-Phase 3 (Scaling)
+### Phase 3 (Scaling)
 - Migration to PostgreSQL
 - User authentication
 - Real-time dashboard
