@@ -216,11 +216,12 @@ photo: <image file>
   "location": "Paraguay River, Zone 4"
 }
 ```
-GET /citizen
-Description: Main page for citizens.
-GET /business
-Description: ESG Dashboard for businesses.
-Calculated Metrics:
+### GET /citizen
+**Description:** Main page for citizens.
+### GET /business
+**Description:** ESG Dashboard for businesses.
+
+#### Calculated Metrics:
 Total weight (kg)
 CO₂ avoided
 Total EcoPoints
