@@ -191,15 +191,19 @@ Values are automatically calculated when a report is created via `/api/analyze`.
 ## 🔌 API Endpoints
 
 ### `POST /api/analyze`
-**Description:** Analyzes a waste item and calculates metrics.
 
-**Request (FormData):**
+**Description:** Analyzes a waste item and calculates environmental metrics.
+
+#### Request (FormData)
+
+```text
 material: "pet"
 item_count: 5
 photo: <image file>
+```
 
+#### Response (JSON)
 
-**Response (JSON):**
 ```json
 {
   "material": "pet",
@@ -216,17 +220,41 @@ photo: <image file>
   "location": "Paraguay River, Zone 4"
 }
 ```
-### GET /citizen
-**Description:** Main page for citizens.
-### GET /business
-**Description:** ESG Dashboard for businesses.
 
-#### Calculated Metrics:
-Total weight (kg)
-CO₂ avoided
-Total EcoPoints
-Estimated income ($0.45/kg)
-ESG Seal Level (1-5)
+---
+
+### `GET /citizen`
+
+**Description:** Main dashboard for citizens.
+
+**Features:**
+- Waste registration
+- AI-assisted weight estimation
+- CO₂ impact visualization
+- EcoPoints tracking
+- Recycling history
+
+---
+
+### `GET /business`
+
+**Description:** ESG dashboard for companies and organizations.
+
+#### Calculated Metrics
+
+- Total recycled weight (kg)
+- Total CO₂ avoided (kg)
+- Total EcoPoints earned
+- Estimated recycling income ($0.45/kg)
+- ESG Seal Level (1–5)
+
+#### Dashboard Features
+
+- Environmental impact overview
+- ESG performance indicators
+- MRV-verified reports
+- Historical trends and statistics
+```
 
 ## 🌍 Emission Factors & Sources
 | Material |	CO₂ Factor (kg/kg) |	Source |
