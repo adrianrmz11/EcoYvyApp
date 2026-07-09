@@ -16,6 +16,19 @@ class WasteReport(db.Model):
     confidence = db.Column(db.Float, default=0.90)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     
+    #  NUEVOS CAMPOS GPS
+    latitude = db.Column(db.Float, nullable=True)
+    longitude = db.Column(db.Float, nullable=True)
+    
+    # 📸 RUTA DE LA IMAGEN
+    photo_path = db.Column(db.String(255), nullable=True)
+    
+    # 📊 ESTADO DEL REPORTE
+    status = db.Column(db.String(20), default='pending')  # pending, collected, verified
+    
+    #  TIPO DE USUARIO
+    user_type = db.Column(db.String(20), default='citizen')  # citizen, ganchero
+    
     def to_dict(self):
         return {
             "id": self.id,
@@ -24,5 +37,14 @@ class WasteReport(db.Model):
             "co2_saved_kg": self.co2_saved_kg,
             "eco_points": self.eco_points,
             "mrv_verified": self.mrv_verified,
-            "timestamp": self.timestamp.isoformat()
+            "confidence": self.confidence,
+            "timestamp": self.timestamp.isoformat(),
+            "latitude": self.latitude,
+            "longitude": self.longitude,
+            "photo_path": self.photo_path,
+            "status": self.status,
+            "user_type": self.user_type
         }
+    
+    def __repr__(self):
+        return f'<WasteReport {self.id}: {self.material} at ({self.latitude}, {self.longitude})>'
