@@ -103,6 +103,10 @@ def detect_material():
     if file.filename == '':
         return jsonify({'error': 'Nombre de archivo vacío'}), 400
 
+    # 1. Capturar coordenadas GPS (opcionales)
+    latitude = request.form.get('latitude')
+    longitude = request.form.get('longitude')
+
     filename = secure_filename(file.filename)
     upload_folder = 'uploads'
     os.makedirs(upload_folder, exist_ok=True)
@@ -112,7 +116,9 @@ def detect_material():
     try:
         results = yolo_model(filepath)
         detections = []
+        primary_material = None
         
+        # 2. Analizar la imagen
         for result in results:
             for box in result.boxes:
                 cls_id = int(box.cls[0])
@@ -120,12 +126,39 @@ def detect_material():
                 class_name = yolo_model.names[cls_id]
                 
                 if class_name in MATERIAL_MAPPING:
+                    material_name = MATERIAL_MAPPING[class_name]
+                    if primary_material is None:
+                        primary_material = material_name # Tomamos el primero como principal
+                        
                     detections.append({
-                        'material': MATERIAL_MAPPING[class_name],
+                        'material': material_name,
                         'clase_yolo': class_name,
                         'confianza': round(confidence * 100, 2)
                     })
 
+        # 3. Guardar en la Base de Datos si detectó algo
+        if primary_material:
+            lat = float(latitude) if latitude else None
+            lng = float(longitude) if longitude else None
+            
+            new_report = WasteReport(
+                material=primary_material.lower(),
+                quantity=len(detections),
+                weight_kg=0.1,  # Valor por defecto para la demo
+                co2_saved_kg=0.05, # Valor por defecto
+                eco_points=10,
+                confidence=detections[0]['confianza'] / 100,
+                latitude=lat,
+                longitude=lng,
+                photo_path=filepath,
+                status='pending',
+                user_type='citizen'
+            )
+            db.session.add(new_report)
+            db.session.commit()
+            print(f"✅ Reporte guardado en DB: {primary_material} en ({lat}, {lng})")
+
+        # 4. Limpiar y responder
         os.remove(filepath)
 
         return jsonify({
