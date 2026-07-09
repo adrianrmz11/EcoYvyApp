@@ -2,26 +2,20 @@ from flask import Flask, render_template, request, jsonify
 from models import db, WasteReport
 from calculations import analyze_upload, business_esg_summary, MATERIAL_META
 from werkzeug.utils import secure_filename
-from ultralytics import YOLO
 import os
+from functools import wraps
 
-app = Flask(__name__)
-app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16 MB
-# Configuración de base de datos
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ecoyvy.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db.init_app(app)
-
-with app.app_context():
-    db.create_all()
-
-ALLOWED_EXT = {"png", "jpg", "jpeg", "webp", "gif"}
-
-def allowed_file(filename: str) -> bool:
-    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXT
-
-# Cargar modelo YOLO UNA SOLA VEZ al iniciar la app
-yolo_model = YOLO('yolov8n.pt')
+# Intentar cargar YOLO, pero si falla, continuar sin él
+try:
+    from ultralytics import YOLO
+    yolo_model = YOLO('yolov8n.pt')
+    YOLO_AVAILABLE = True
+    print("✅ YOLO cargado exitosamente")
+except Exception as e:
+    yolo_model = None
+    YOLO_AVAILABLE = False
+    print(f"⚠️ YOLO no disponible: {e}")
+    print("⚠️ La detección de materiales por IA no funcionará, pero el resto de la app sí")
 
 # Mapeo de clases YOLO a materiales de reciclaje
 MATERIAL_MAPPING = {
@@ -36,21 +30,32 @@ MATERIAL_MAPPING = {
     'vase': 'GLASS'
 }
 
+app = Flask(__name__)
+app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16 MB
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ecoyvy.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db.init_app(app)
+
+with app.app_context():
+    db.create_all()
+
+ALLOWED_EXT = {"png", "jpg", "jpeg", "webp", "gif"}
+
+def allowed_file(filename: str) -> bool:
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXT
+
 # ── Páginas ────────────────────────────────────────────────────────────────────
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
-
 @app.route("/citizen")
 def citizen():
-    # Materiales primarios del equipo primero, luego los extendidos
     primary   = ["pet", "can", "glass", "cardboard"]
     secondary = [k for k in MATERIAL_META if k not in primary]
     ordered   = {k: MATERIAL_META[k] for k in primary + secondary}
     return render_template("citizen.html", materials=ordered)
-
 
 @app.route("/business")
 def business():
@@ -84,9 +89,13 @@ def api_analyze():
 
     return jsonify(analyze_upload(material, item_count, mrv_verified=True))
 
-
 @app.route('/api/detect-material', methods=['POST'])
 def detect_material():
+    if not YOLO_AVAILABLE:
+        return jsonify({
+            'error': 'YOLO no está disponible en este entorno. Por favor, probá en Google Colab o en otra computadora.'
+        }), 503
+    
     if 'image' not in request.files:
         return jsonify({'error': 'No se envió ninguna imagen'}), 400
     
@@ -130,7 +139,5 @@ def detect_material():
             os.remove(filepath)
         return jsonify({'error': str(e)}), 500
 
-
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
-
