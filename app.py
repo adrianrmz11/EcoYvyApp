@@ -172,5 +172,34 @@ def detect_material():
             os.remove(filepath)
         return jsonify({'error': str(e)}), 500
 
+# ── API: Obtener todos los reportes para el mapa ─────────────────────────────
+
+@app.route("/api/reports", methods=["GET"])
+def get_reports():
+    try:
+        # Traemos todos los reportes de la base de datos
+        reports = WasteReport.query.all()
+        
+        # Los convertimos a un formato JSON que el mapa puede leer
+        reports_data = []
+        for report in reports:
+            reports_data.append({
+                "id": report.id,
+                "material": report.material,
+                "latitude": report.latitude,
+                "longitude": report.longitude,
+                "confidence": report.confidence,
+                "status": report.status,
+                "timestamp": report.timestamp.strftime("%Y-%m-%d %H:%M") if report.timestamp else None
+            })
+            
+        return jsonify(reports_data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@app.route("/map")
+def public_map():
+    return render_template("map.html")
+
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
