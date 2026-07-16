@@ -201,5 +201,47 @@ def get_reports():
 def public_map():
     return render_template("map.html")
 
+# ── RUTA: Panel del Ganchero ────────────────────────────────────────────────
+
+@app.route("/ganchero")
+def ganchero_dashboard():
+    return render_template("ganchero.html")
+
+# ── API: Obtener SOLO reportes pendientes ────────────────────────────────────
+
+@app.route("/api/reports/pending", methods=["GET"])
+def get_pending_reports():
+    try:
+        # Filtramos solo los que tienen status 'pending'
+        reports = WasteReport.query.filter_by(status='pending').all()
+        
+        reports_data = []
+        for report in reports:
+            reports_data.append({
+                "id": report.id,
+                "material": report.material,
+                "latitude": report.latitude,
+                "longitude": report.longitude,
+                "confidence": report.confidence,
+                "timestamp": report.timestamp.strftime("%Y-%m-%d %H:%M") if report.timestamp else None
+            })
+            
+        return jsonify(reports_data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# ── API: Marcar reporte como recolectado ─────────────────────────────────────
+
+@app.route("/api/reports/<int:report_id>/collect", methods=["POST"])
+def collect_report(report_id):
+    try:
+        report = WasteReport.query.get_or_404(report_id)
+        report.status = 'collected'  # Cambiamos el estado
+        db.session.commit()
+        return jsonify({"success": True, "message": f"Reporte #{report_id} marcado como recolectado"})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+    
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
