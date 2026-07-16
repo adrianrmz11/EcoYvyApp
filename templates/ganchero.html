@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Ganchero - EcoYvy</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; }
+        
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header h1 { font-size: 24px; margin-bottom: 5px; }
+        .header p { color: #bdc3c7; font-size: 14px; }
+        
+        #map { height: calc(100vh - 100px); width: 100%; }
+        
+        .stats {
+            background: white;
+            padding: 15px 25px;
+            position: absolute;
+            top: 90px;
+            right: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            z-index: 1000;
+            border-left: 5px solid #e67e22;
+        }
+        .stat-item { margin: 8px 0; font-size: 15px; }
+        .stat-value { font-weight: bold; color: #e67e22; font-size: 20px; }
+        
+        .collect-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .collect-btn:hover { background: #219150; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>♻️ Panel de Ganchero</h1>
+        <p>Reportes pendientes de recolección en tiempo real</p>
+    </div>
+    
+    <div class="stats">
+        <div class="stat-item">
+            📦 Pendientes: <span class="stat-value" id="pendingCount">0</span>
+        </div>
+    </div>
+    
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        console.log('🚀 Iniciando Panel de Ganchero...');
+        
+        const map = L.map('map').setView([-25.2637, -57.5759], 12);
+        
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '© OpenStreetMap © CARTO'
+        }).addTo(map);
+
+        window.markersMap = {};
+
+        const pendingIcon = L.divIcon({
+            html: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 36" width="32" height="42">
+                    <path fill="#e67e22" stroke="#fff" stroke-width="2" d="M12 0C5.373 0 0 5.373 0 12c0 8.4 12 24 12 24s12-15.6 12-24c0-6.627-5.373-12-12-12z"/>
+                    <circle cx="12" cy="12" r="4" fill="#fff"/>
+                   </svg>`,
+            className: 'custom-marker',
+            iconSize: [32, 42],
+            iconAnchor: [16, 42],
+            popupAnchor: [0, -42]
+        });
+
+        window.collectReport = async function(id, btnElement) {
+            btnElement.disabled = true;
+            btnElement.textContent = '⏳ Procesando...';
+            
+            try {
+                const response = await fetch('/api/reports/' + id + '/collect', { method: 'POST' });
+                const data = await response.json();
+                
+                if (data.success) {
+                    if (window.markersMap[id]) {
+                        map.removeLayer(window.markersMap[id]);
+                        delete window.markersMap[id];
+                    }
+                    const countEl = document.getElementById('pendingCount');
+                    countEl.textContent = Math.max(0, parseInt(countEl.textContent) - 1);
+                    alert('✅ ¡Reporte marcado como recolectado!');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                btnElement.disabled = false;
+                btnElement.textContent = '✅ Marcar como Recolectado';
+            }
+        };
+
+        async function loadPendingReports() {
+            console.log('📡 Cargando reportes pendientes...');
+            
+            try {
+                const response = await fetch('/api/reports/pending');
+                const reports = await response.json();
+                
+                console.log('✅ Reportes recibidos:', reports.length);
+                document.getElementById('pendingCount').textContent = reports.length;
+                
+                const bounds = L.latLngBounds();
+                let hasPoints = false;
+
+                reports.forEach(function(report) {
+                    if (report.latitude && report.longitude) {
+                        hasPoints = true;
+                        console.log('📍 Marcador #' + report.id + ':', report.latitude, report.longitude, report.material);
+
+                        const marker = L.marker([report.latitude, report.longitude], { icon: pendingIcon }).addTo(map);
+                        window.markersMap[report.id] = marker;
+                        
+                        const popupContent = '<div style="min-width:200px;text-align:center;">' +
+                            '<h3 style="color:#e67e22;margin-bottom:10px;">' + report.material.toUpperCase() + '</h3>' +
+                            '<p style="margin:5px 0;"><strong>ID:</strong> #' + report.id + '</p>' +
+                            '<p style="margin:5px 0;"><strong>Confianza:</strong> ' + (report.confidence * 100).toFixed(0) + '%</p>' +
+                            '<button class="collect-btn" onclick="window.collectReport(' + report.id + ', this)">✅ Marcar como Recolectado</button>' +
+                            '</div>';
+                        
+                        marker.bindPopup(popupContent);
+                        bounds.extend([report.latitude, report.longitude]);
+                    }
+                });
+
+                if (hasPoints) {
+                    setTimeout(function() {
+                        map.fitBounds(bounds, { padding: [100, 100] });
+                        console.log('🗺️ Zoom ajustado. Bounds:', bounds.toBBoxString());
+                    }, 500);
+                }
+                
+            } catch (error) {
+                console.error('❌ Error cargando reportes:', error);
+            }
+        }
+
+        loadPendingReports();
+    </script>
+</body>
+</html>
